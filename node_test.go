@@ -51,3 +51,29 @@ func TestAppend(t *testing.T) {
 	assert.Equal(err_key_already_exists, err.Error())
 
 }
+
+func TestChild(t *testing.T) {
+	assert := assert.New(t)
+
+	engine := Normal{}
+	key := "root"
+
+	node := Init(engine, key)
+	node.Set("value")
+
+	newNode, _ := node.Append("number")
+	newNode.Set(123)
+
+	newNode, _ = node.Append("word")
+	newNode.Set("love")
+
+	assert.Equal(2, len(node.Children))
+
+	found, errFound := node.Child("word")
+	assert.NoError(errFound)
+	assert.Equal("love", found.Value)
+
+	notFound, errNotFound := node.Child("mock")
+	assert.Error(errNotFound)
+	assert.NotEqual("love", notFound.Value)
+}

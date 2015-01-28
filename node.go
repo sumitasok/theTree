@@ -7,6 +7,7 @@ import (
 
 const (
 	err_key_already_exists = "Key already exists, use Update"
+	err_key_doesnt_exist   = "Key doesn't exist"
 )
 
 type Node struct {
@@ -52,4 +53,20 @@ func (n *Node) Append(key string) (*Node, error) {
 	n.Children = append(n.Children, &child)
 
 	return &child, nil
+}
+
+func (n *Node) Child(key string) (*Node, error) {
+	return find(n.Children, key)
+}
+
+func find(children []*Node, key string) (*Node, error) {
+	if len(children) == 0 {
+		return &Node{}, errors.New(err_key_doesnt_exist)
+	} else {
+		if children[0].Key == key {
+			return children[0], nil
+		} else {
+			return find(children[1:], key)
+		}
+	}
 }
