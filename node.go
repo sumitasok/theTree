@@ -1,5 +1,9 @@
 package theTree
 
+import (
+	"reflect"
+)
+
 type Node struct {
 	Engine
 	Core
@@ -10,7 +14,7 @@ type Core struct {
 	Parent   *Node
 	Key      string
 	Value    interface{}
-	dataType string
+	DataType string
 }
 
 func Init(engine Engine, key string) *Node {
@@ -20,5 +24,6 @@ func Init(engine Engine, key string) *Node {
 
 func (n *Node) Set(value interface{}) *Node {
 	n.Value = value
+	n.DataType = reflect.TypeOf(value).String()
 	return n
 }

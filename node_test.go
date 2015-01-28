@@ -29,4 +29,5 @@ func TestSet(t *testing.T) {
 
 	assert.True(true)
 	assert.Equal("value", node.Value)
+	assert.Equal("string", node.DataType)
 }
