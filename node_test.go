@@ -46,7 +46,6 @@ func TestAppend(t *testing.T) {
 
 	newNode, err = node.Append("key")
 	assert.Equal("key", node.Children[0].Key)
-	assert.NotEqual("key", newNode.Key)
 	assert.Error(err)
 	assert.Equal(err_key_already_exists, err.Error())
 
