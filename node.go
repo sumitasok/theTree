@@ -17,3 +17,8 @@ func Init(engine Engine, key string) *Node {
 	core := Core{Key: key}
 	return &Node{engine, core}
 }
+
+func (n *Node) Set(value interface{}) *Node {
+	n.Value = value
+	return n
+}

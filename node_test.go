@@ -15,5 +15,18 @@ func TestNodeInit(t *testing.T) {
 	node := Init(engine, key)
 
 	assert.True(true)
-	assert.Nil(node)
+	assert.NotNil(node)
+}
+
+func TestSet(t *testing.T) {
+	assert := assert.New(t)
+
+	engine := Normal{}
+	key := "root"
+
+	node := Init(engine, key)
+	node.Set("value")
+
+	assert.True(true)
+	assert.Equal("value", node.Value)
 }
