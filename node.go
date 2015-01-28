@@ -46,6 +46,16 @@ func (n *Node) Append(key string) (*Node, error) {
 	return &child, nil
 }
 
+func (n *Node) UpdateChild(key string, value interface{}) (*Node, error) {
+	if child, err := n.Child(key); err == nil {
+		child.Value = value
+		return child, nil
+	}
+	child := Node{}
+	return &child, errors.New(err_key_doesnt_exist)
+
+}
+
 func (n *Node) Child(key string) (*Node, error) {
 	return find(n.Children, key)
 }

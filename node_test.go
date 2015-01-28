@@ -51,6 +51,31 @@ func TestAppend(t *testing.T) {
 
 }
 
+func TestUpdateChild(t *testing.T) {
+	assert := assert.New(t)
+
+	engine := Normal{}
+	key := "root"
+
+	node := Init(engine, key)
+	node.Set("value")
+
+	newNode, err := node.Append("key")
+	newNode.Set("value")
+
+	newNode, err = node.UpdateChild("key", 123)
+	assert.Equal("key", node.Children[0].Key)
+	assert.Equal(123, node.Children[0].Value)
+	assert.NoError(err)
+
+	newNode, err = node.UpdateChild("nonexistantkey", 123)
+	assert.Error(err)
+	assert.Equal(err_key_doesnt_exist, err.Error())
+	assert.Empty(newNode.Key)
+	assert.Empty(newNode.Value)
+
+}
+
 func TestChild(t *testing.T) {
 	assert := assert.New(t)
 
