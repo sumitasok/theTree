@@ -101,6 +101,14 @@ func (n Node) Count() int {
 	return len(n.Children)
 }
 
+func (n Node) CountPre() int {
+	if n.Parent == nil {
+		return 0
+	} else {
+		return 1 + n.Parent.CountPre()
+	}
+}
+
 func find(children []*Node, key string) (*Node, error) {
 	if len(children) == 0 {
 		return &Node{}, errors.New(err_key_doesnt_exist)
