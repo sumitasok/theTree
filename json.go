@@ -12,6 +12,6 @@ func Parse(data []byte) (*Node, error) {
 
 func stripOuterCurls(str string) string {
 	initialIndex := strings.Index(str, "{")
-	finalIndex := strings.Index(str, "}")
+	finalIndex := strings.LastIndex(str, "}")
 	return str[initialIndex+1 : finalIndex]
 }
