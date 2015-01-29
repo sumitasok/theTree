@@ -2,6 +2,7 @@ package theTree
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 )
@@ -37,7 +38,7 @@ func (n *Node) Set(value interface{}) *Node {
 }
 
 func (n *Node) Append(key string) (*Node, error) {
-	child := Node{n.Engine, Core{Key: key, Parent: n.Parent}}
+	child := Node{n.Engine, Core{Key: key, Parent: n}}
 
 	if child, err := n.Child(key); err == nil {
 		return child, errors.New(err_key_already_exists)
@@ -77,6 +78,14 @@ func (n *Node) Find(key string) (*Node, error) {
 		}
 	} else {
 		return &Node{}, errors.New(err_key_doesnt_exist)
+	}
+}
+
+func (n *Node) Ancestry() string {
+	if n.Parent == nil {
+		return n.Key
+	} else {
+		return fmt.Sprintf("%s:%s", n.Parent.Ancestry(), n.Key)
 	}
 }
 
