@@ -207,6 +207,32 @@ func TestCountPre(t *testing.T) {
 	assert.Equal(2, nodeB.CountPre())
 }
 
+func TestCountDeep(t *testing.T) {
+	assert := assert.New(t)
+
+	engine := Normal{}
+	key := "root"
+
+	node := Init(engine, key)
+	node.Set("value")
+
+	nodeA, _ := node.Append("number")
+	nodeA.Set(123)
+
+	nodeB, _ := nodeA.Append("key")
+	nodeB.Set("rocket")
+
+	nodeC, _ := nodeA.Append("key 2")
+	nodeC.Set("rocket 2")
+
+	nodeD, _ := nodeB.Append("D")
+	nodeD.Set("rocket")
+
+	assert.Equal(4, node.CountDeep())
+	assert.Equal(3, nodeA.CountDeep())
+	assert.Equal(1, nodeB.CountDeep())
+}
+
 /*
 func TestCount(t *testing.T) {
 	assert := assert.New(t)

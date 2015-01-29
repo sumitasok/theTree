@@ -109,6 +109,18 @@ func (n Node) CountPre() int {
 	}
 }
 
+func (n Node) CountDeep() int {
+	if len(n.Children) == 0 {
+		return 0
+	} else {
+		i := 0
+		for _, child := range n.Children {
+			i = i + child.CountDeep()
+		}
+		return len(n.Children) + i
+	}
+}
+
 func find(children []*Node, key string) (*Node, error) {
 	if len(children) == 0 {
 		return &Node{}, errors.New(err_key_doesnt_exist)
