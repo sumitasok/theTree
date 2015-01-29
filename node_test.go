@@ -101,3 +101,34 @@ func TestChild(t *testing.T) {
 	assert.Error(errNotFound)
 	assert.NotEqual("love", notFound.Value)
 }
+
+func TestFind(t *testing.T) {
+	assert := assert.New(t)
+
+	engine := Normal{}
+	key := "root"
+
+	node := Init(engine, key)
+	node.Set("value")
+
+	nodeA, _ := node.Append("number")
+	nodeA.Set(123)
+
+	nodeB, _ := nodeA.Append("key")
+	nodeB.Set("rocket")
+
+	_, errNonExistant := node.Find("love:number:key")
+	assert.Error(errNonExistant)
+
+	actNode, actErr := node.Find("root")
+	assert.Equal(node.Value, actNode.Value)
+	assert.NoError(actErr)
+
+	actNode, actErr = node.Find("root:number")
+	assert.Equal(nodeA.Value, actNode.Value)
+	assert.NoError(actErr)
+
+	actNode, actErr = node.Find("root:number:key")
+	assert.Equal(nodeB.Value, actNode.Value)
+	assert.NoError(actErr)
+}

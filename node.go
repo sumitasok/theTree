@@ -3,9 +3,11 @@ package theTree
 import (
 	"errors"
 	"reflect"
+	"strings"
 )
 
 const (
+	KEY_SEPERATOR          = ":"
 	err_key_already_exists = "Key already exists, use Update"
 	err_key_doesnt_exist   = "Key doesn't exist"
 )
@@ -58,6 +60,24 @@ func (n *Node) UpdateChild(key string, value interface{}) (*Node, error) {
 
 func (n *Node) Child(key string) (*Node, error) {
 	return find(n.Children, key)
+}
+
+func (n *Node) Find(key string) (*Node, error) {
+	keySlice := strings.Split(key, KEY_SEPERATOR)
+
+	if n.Key == keySlice[0] {
+		if len(keySlice) == 1 {
+			return n, nil
+		}
+		next, err := find(n.Children, keySlice[1])
+		if err == nil {
+			return next.Find(strings.Join(keySlice[1:], KEY_SEPERATOR))
+		} else {
+			return &Node{}, errors.New(err_key_doesnt_exist)
+		}
+	} else {
+		return &Node{}, errors.New(err_key_doesnt_exist)
+	}
 }
 
 func find(children []*Node, key string) (*Node, error) {
