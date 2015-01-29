@@ -1,6 +1,9 @@
 # theTree
 Tree like datastructure
 
+Node is a data struct which allows nested key value pair data. Node provides easy methods to traverse the data in it.
+
+
 
 To initialize the node
 pass Normal{} as the Engine, this is kept for a later extension, if some one wants to override the methods.
