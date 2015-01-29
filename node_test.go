@@ -251,6 +251,59 @@ func TestJson(t *testing.T) {
 	assert.NoError(err)
 }
 
+func TestInitFromJson(t *testing.T) {
+	assert := assert.New(t)
+
+	engine := Normal{}
+	key := "root"
+
+	node := Init(engine, key)
+	node.Set("value")
+
+	nodeA, _ := node.Append("number")
+	nodeA.Set(123)
+
+	nodeB, _ := nodeA.Append("key")
+	nodeB.Set("rocket")
+
+	data, err := node.Json()
+	assert.NoError(err)
+
+	reborn := InitFromJson(data)
+	c, _ := reborn.Child("number")
+
+	assert.Equal(node.Key, c.parent.Key)
+}
+
+func TestSetParent(t *testing.T) {
+	assert := assert.New(t)
+
+	engine := Normal{}
+	key := "root"
+
+	node := Init(engine, key)
+	node.Set("value")
+
+	nodeA, _ := node.Append("number")
+	nodeA.Set(123)
+	nodeA.parent = nil
+
+	c, _ := node.Child("number")
+	assert.Nil(c.parent)
+
+	nodeB, _ := nodeA.Append("key")
+	nodeB.Set("rocket")
+	nodeB.parent = nil
+
+	data, err := node.Json()
+	assert.NoError(err)
+
+	reborn := InitFromJson(data)
+	c, _ = reborn.Child("number")
+
+	assert.Equal(node.Key, c.parent.Key)
+}
+
 /*
 func TestCount(t *testing.T) {
 	assert := assert.New(t)

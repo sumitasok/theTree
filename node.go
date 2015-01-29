@@ -32,6 +32,24 @@ func Init(engine Engine, key string) *Node {
 	return &Node{engine, core}
 }
 
+func InitFromJson(data []byte) *Node {
+	node := &Node{}
+	json.Unmarshal(data, node)
+
+	node.SetParent()
+
+	return node
+}
+
+func (n *Node) SetParent() {
+	if len(n.Children) > 0 {
+		for _, child := range n.Children {
+			child.parent = n
+			child.SetParent()
+		}
+	}
+}
+
 func (n *Node) Set(value interface{}) *Node {
 	n.Value = value
 	n.DataType = reflect.TypeOf(value).String()
