@@ -303,9 +303,3 @@ func TestSetParent(t *testing.T) {
 
 	assert.Equal(node.Key, c.parent.Key)
 }
-
-/*
-func TestCount(t *testing.T) {
-	assert := assert.New(t)
-}
-*/
