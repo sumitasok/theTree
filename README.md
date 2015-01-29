@@ -2,16 +2,17 @@
 Tree like datastructure
 
 
-You initialize the data
+To initialize the node
+pass Normal{} as the Engine, this is kept for a later extension, if some one wants to override the methods.
 
 ```
-node = Init(Engine{}, "root-key-name")
+node = Init(Normal{}, "name")
 ```
-Set the Value for the Key
+Set the Value for the Key.
 Value can be anything as it is of datatype interface{}
 
 ```
-node.Set("Value")
+node.Set("Bob")
 ```
 If you wish to know the data type of the Value in the Node
 
@@ -19,25 +20,61 @@ If you wish to know the data type of the Value in the Node
 node.DataType()
 ```
 
-Node.Child(key)
-Node.Value
+In order to append a Child key-value pair to the current Node
 
-Node.Set(value)
-    Also sets the dataType using reflect
-Node.Append(childKey) (Node, error)
-    Also set Parent of the child Node as Self
+```
+child, err := node.Append("age")
+child.Set(27)
+```
+This method returns an error when the Child with key as 'age' exists
 
-Node.Init(key) Node
-Node.Append(key, value) (Node, error) error if key already existing, cannot be appended, instead has to use Update.
-Node.Update(key, value) (Node, error)
+In order to Update an existing child's value
 
-Check if there is any tree implementation in Go
-Learn how error can also have nil as value. Does error embed nil?
+```
+child, err = node.UpdateChild("age", 22)
+```
+To find a child node with the key
 
-Node.Find("colon:separated:keys")
-Node.FindFirst("key") length first or breadth first traversal
-Node.Ancestry() string colon:separated:keys till root node
-Node.Root() Node
-Node.Count()
-Node.CountPost()
-Node.CountPre()
+```
+child, errFound := node.Child("age")
+```
+throughs error if the child with the key is not present
+
+To find the child node from an ancestral path extending from root node(the node on which we are calling) to child node.
+
+```
+child, actErr = node.Find("name:age")
+```
+Throughs error if the node is not found.
+The nesting can go any long as the developer wants it to. eg `node.Find("name:age:category:employed")`
+
+In order to find the heirarchical pat of a child node.
+
+```
+node.Ancestry()
+```
+
+To get the root node from any child node, call
+
+```
+child.Root()
+```
+
+To find the number of children the node has
+
+```
+node.Count()
+```
+
+To find the number of nodes till root node from the child node
+
+```
+child.CountPre()
+```
+To count all the children till tail node
+
+```
+node.CountDeep()
+```
+
+---
