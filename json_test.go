@@ -1,7 +1,7 @@
 package theTree
 
 import (
-	// "fmt"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -52,4 +52,16 @@ func TestOnlyColon(t *testing.T) {
 	e.OnlyColon()
 	assert.Equal("holder", e.Key)
 	assert.Equal("holds", e.Value)
+}
+
+func TestRegexp(t *testing.T) {
+	// assert := assert.New(t)
+
+	content := string([]byte(`{"holder": "holds","hash": {"inner": "peace"}}`))
+	e := Element{Content: content}
+	fmt.Println(e.RegEx())
+
+	content = string([]byte(`{"holder": "holds","hash": {"inner": "peace"}, "this": {"better": "place"}}`))
+	e = Element{Content: content}
+	fmt.Println(e.RegEx())
 }

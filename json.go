@@ -1,6 +1,7 @@
 package theTree
 
 import (
+	"regexp"
 	"strings"
 )
 
@@ -57,6 +58,11 @@ func (e *Element) OnlyColon() {
 			}
 		}
 	}
+}
+
+func (e *Element) RegEx() []string {
+	re := regexp.MustCompile("{([a-z\",: ]+)}")
+	return re.FindAllString(e.Content, -1)
 }
 
 // node is a data struct thure which allows
