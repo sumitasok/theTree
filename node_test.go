@@ -148,7 +148,24 @@ func TestAncestry(t *testing.T) {
 	nodeB, _ := nodeA.Append("key")
 	nodeB.Set("rocket")
 
-	assert.NotNil(nodeB.Parent)
-
 	assert.Equal("root:number:key", nodeB.Ancestry())
+}
+
+func TestRoot(t *testing.T) {
+	assert := assert.New(t)
+
+	engine := Normal{}
+	key := "root"
+
+	node := Init(engine, key)
+	node.Set("value")
+
+	nodeA, _ := node.Append("number")
+	nodeA.Set(123)
+
+	nodeB, _ := nodeA.Append("key")
+	nodeB.Set("rocket")
+
+	assert.Equal(node, nodeB.Root())
+
 }

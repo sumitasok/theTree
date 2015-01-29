@@ -89,6 +89,14 @@ func (n *Node) Ancestry() string {
 	}
 }
 
+func (n Node) Root() *Node {
+	if n.Parent == nil {
+		return &n
+	} else {
+		return n.Parent.Root()
+	}
+}
+
 func find(children []*Node, key string) (*Node, error) {
 	if len(children) == 0 {
 		return &Node{}, errors.New(err_key_doesnt_exist)
