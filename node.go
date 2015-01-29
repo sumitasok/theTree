@@ -20,7 +20,7 @@ type Node struct {
 
 type Core struct {
 	Children []*Node
-	Parent   *Node
+	parent   *Node
 	Key      string
 	Value    interface{}
 	DataType string
@@ -38,7 +38,7 @@ func (n *Node) Set(value interface{}) *Node {
 }
 
 func (n *Node) Append(key string) (*Node, error) {
-	child := Node{n.Engine, Core{Key: key, Parent: n}}
+	child := Node{n.Engine, Core{Key: key, parent: n}}
 
 	if child, err := n.Child(key); err == nil {
 		return child, errors.New(err_key_already_exists)
@@ -82,18 +82,18 @@ func (n *Node) Find(key string) (*Node, error) {
 }
 
 func (n *Node) Ancestry() string {
-	if n.Parent == nil {
+	if n.parent == nil {
 		return n.Key
 	} else {
-		return fmt.Sprintf("%s:%s", n.Parent.Ancestry(), n.Key)
+		return fmt.Sprintf("%s:%s", n.parent.Ancestry(), n.Key)
 	}
 }
 
 func (n Node) Root() *Node {
-	if n.Parent == nil {
+	if n.parent == nil {
 		return &n
 	} else {
-		return n.Parent.Root()
+		return n.parent.Root()
 	}
 }
 
@@ -102,10 +102,10 @@ func (n Node) Count() int {
 }
 
 func (n Node) CountPre() int {
-	if n.Parent == nil {
+	if n.parent == nil {
 		return 0
 	} else {
-		return 1 + n.Parent.CountPre()
+		return 1 + n.parent.CountPre()
 	}
 }
 
