@@ -1,7 +1,6 @@
 package theTree
 
 import (
-	// "fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -231,6 +230,25 @@ func TestCountDeep(t *testing.T) {
 	assert.Equal(4, node.CountDeep())
 	assert.Equal(3, nodeA.CountDeep())
 	assert.Equal(1, nodeB.CountDeep())
+}
+
+func TestJson(t *testing.T) {
+	assert := assert.New(t)
+
+	engine := Normal{}
+	key := "root"
+
+	node := Init(engine, key)
+	node.Set("value")
+
+	nodeA, _ := node.Append("number")
+	nodeA.Set(123)
+
+	nodeB, _ := nodeA.Append("key")
+	nodeB.Set("rocket")
+
+	_, err := node.Json()
+	assert.NoError(err)
 }
 
 /*

@@ -1,6 +1,7 @@
 package theTree
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"reflect"
@@ -119,6 +120,10 @@ func (n Node) CountDeep() int {
 		}
 		return len(n.Children) + i
 	}
+}
+
+func (n Node) Json() ([]byte, error) {
+	return json.Marshal(n)
 }
 
 func find(children []*Node, key string) (*Node, error) {
