@@ -19,12 +19,18 @@ const (
 func SetNodeValue(node *Node, byteArr []byte) {
 	if node.parent == nil {
 		// stripOuterCurls(string(byteArr))
-		byteArr = byteRemoveByte(byteArr, R_SPACE)
+		byteArr = bytePluckByte(byteArr, R_SPACE)
 
 		if byteIs(byteArr, R_OPEN_CURL) {
 
 		}
 	}
+}
+
+func bytePluckByte(byteArr []byte, byteChar byte) []byte {
+	byteArr = byteRemoveByte(byteArr, byteChar)
+	byteArr = byteRemoveByteFromBack(byteArr, byteChar)
+	return byteArr
 }
 
 func byteStripOuterCurls(byteArr []byte) []byte {

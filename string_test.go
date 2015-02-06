@@ -31,6 +31,13 @@ func TestStringParse(t *testing.T) {
 	fmt.Println("-----------------------------------")
 }
 
+func TestBytePluckByte(t *testing.T) {
+	assert := assert.New(t)
+
+	byteArr := bytePluckByte([]byte(`  {  `), R_SPACE)
+	assert.Equal(string([]byte(`{`)), string(byteArr))
+}
+
 func TestByteRemoveByte(t *testing.T) {
 	assert := assert.New(t)
 
