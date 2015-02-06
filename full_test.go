@@ -59,7 +59,7 @@ func TestParseNode(t *testing.T) {
 	assert.NoError(err)
 
 	newNodeValue, err1 := newNode.Value.([]uint8)
-	assert.Equal("key", string(newNodeValue))
-	assert.False(err1)
+	assert.Equal(string([]byte(`"value \""`)), string(newNodeValue))
+	assert.True(err1)
 
 }

@@ -22,6 +22,7 @@ const (
 func SetNodeValue(node *Node, byteArr []byte) error {
 	byteArr = bytePluckByteRecursively(byteArr, R_SPACE, R_SPACE)
 
+	fmt.Println(string(byteArr))
 	node.Set(byteArr)
 
 	if byteIs(byteArr, R_OPEN_CURL) {
@@ -44,11 +45,11 @@ func SetNodeValue(node *Node, byteArr []byte) error {
 }
 
 func parseNode(node *Node, value []byte) {
-	byteArr, _ := node.Value.([]uint8)
+	byteArr := value
 	// go through each , seperated key-value pair
 	// and create a child
 
-	str, _ := node.Value.([]uint8)
+	str := byteArr
 	fmt.Println("parseNode 1", node.Key, string(str))
 
 	byteArrOfArr, err := byteSplitKeyValue(byteArr, []byte(`:`), 2)
@@ -61,17 +62,18 @@ func parseNode(node *Node, value []byte) {
 			// and send next parse with remaining value
 			baa, errGetValue := GetValue(byteArrOfArr[1])
 			if errGetValue == nil {
-				fmt.Println("err nil in GetValue")
+				fmt.Println("err nil in GetValue", string(baa[0]))
 				SetNodeValue(newNode, baa[0])
 				fmt.Println("parseNode 3", newNode.Key, string(baa[0]))
 
 				SetNodeValue(node, baa[1])
 				fmt.Println("parseNode 4", node.Key, string(baa[1]))
 
-				parseNode(node)
+				// parseNode(node, )
+			} else {
+				fmt.Println("parseNode 2", newNode.Key, string(byteArrOfArr[1]))
+				SetNodeValue(newNode, byteArrOfArr[1])
 			}
-			fmt.Println("parseNode 2", newNode.Key, string(byteArrOfArr[1]))
-			SetNodeValue(newNode, byteArrOfArr[1])
 		}
 	}
 }
