@@ -17,16 +17,21 @@ import (
 )
 
 func TestStringParse(t *testing.T) {
-	// assert := assert.New(t)
+	assert := assert.New(t)
 
-	// byteArray := []byte(`{key: "value \"", "key2" : []}`)
+	byteArray := []byte(`{key: "value \"", "key2" : []}`)
 
-	// engine := Normal{}
-	// key := "root"
+	engine := Normal{}
+	key := "root"
 
-	// node := Init(engine, key)
+	node := Init(engine, key)
 
-	// SetNodeValue(node, byteArray)
+	err := SetNodeValue(node, byteArray)
+	expectedByteArr := []byte(`key: "value \"", "key2" : []`)
+	assert.NoError(err)
+
+	actualByteArr, _ := node.Value.([]uint8)
+	assert.Equal(string(expectedByteArr), string(actualByteArr))
 
 	fmt.Println("-----------------------------------")
 }

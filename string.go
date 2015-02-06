@@ -3,6 +3,7 @@ package theTree
 import (
 	// "bytes"
 	"errors"
+	// "fmt"
 )
 
 const (
@@ -17,15 +18,25 @@ const (
 	R_TAB           = 9
 )
 
-func SetNodeValue(node *Node, byteArr []byte) {
+func SetNodeValue(node *Node, byteArr []byte) error {
 	if node.parent == nil {
 		// stripOuterCurls(string(byteArr))
 		byteArr = bytePluckByteRecursively(byteArr, R_SPACE, R_SPACE)
 
 		if byteIs(byteArr, R_OPEN_CURL) {
-
+			if byteArr, err := byteRemove(byteArr, R_OPEN_CURL); err == nil {
+				if byteArr, err = byteRemove(Reverse(byteArr), R_CLOSED_CURLED); err == nil {
+					byteArr = Reverse(byteArr)
+					node.Set(byteArr)
+				} else {
+					return err
+				}
+			} else {
+				return errors.New("error")
+			}
 		}
 	}
+	return nil
 }
 
 func bytePluckByteRecursively(byteArr []byte, byteChar byte, byteBackChar byte) []byte {
