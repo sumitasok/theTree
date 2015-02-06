@@ -48,6 +48,23 @@ func TestByteRemoveByte(t *testing.T) {
 
 }
 
+func TestByteRemoveByteFromBack(t *testing.T) {
+	assert := assert.New(t)
+
+	byteArr := []byte(``)
+	assert.Empty(byteArr)
+
+	byteArr = byteRemoveByteFromBack([]byte(` `), R_SPACE)
+	assert.Empty(byteArr)
+
+	byteArr = byteRemoveByteFromBack([]byte(`  `), R_SPACE)
+	assert.Empty(byteArr)
+
+	byteArr = byteRemoveByteFromBack([]byte(`}  `), R_SPACE)
+	assert.Equal(string([]byte(`}`)), string(byteArr))
+
+}
+
 func TestByteIs(t *testing.T) {
 	assert := assert.New(t)
 

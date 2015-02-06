@@ -27,9 +27,9 @@ func SetNodeValue(node *Node, byteArr []byte) {
 	}
 }
 
-// func byteStripOuterCurls(byteArr []byte) []byte {
-
-// }
+func byteStripOuterCurls(byteArr []byte) []byte {
+	return byteArr
+}
 
 func byteRemoveByte(byteArr []byte, byteChar byte) []byte {
 	if len(byteArr) == 0 {
@@ -43,8 +43,10 @@ func byteRemoveByte(byteArr []byte, byteChar byte) []byte {
 	}
 }
 
-func byteRemoveFromBack(byteArr []byte, byteChar byte) []byte {
-	return byteArr
+func byteRemoveByteFromBack(byteArr []byte, byteChar byte) []byte {
+	revByteArr := Reverse(byteArr)
+	revByteArr = byteRemoveByte(revByteArr, byteChar)
+	return Reverse(revByteArr)
 }
 
 func byteIs(byteArr []byte, byteChar byte) bool {
