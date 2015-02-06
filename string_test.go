@@ -7,6 +7,16 @@ import (
 	"testing"
 )
 
+func TestByteSplitKeyValue(t *testing.T) {
+	assert := assert.New(t)
+	byteArr := []byte(`key: "value \"", "key2" : []`)
+	byteArrOfArr, err := byteSplitKeyValue(byteArr, []byte(`:`), 2)
+	assert.Equal("key", string(byteArrOfArr[0]))
+	assert.Equal(string([]byte(` "value \"", "key2" : []`)), string(byteArrOfArr[1]))
+
+	assert.Nil(err)
+}
+
 func TestByteStripOuterCurls(t *testing.T) {
 	assert := assert.New(t)
 	byteArr := []byte(`{key: "value \"", "key2" : []}`)

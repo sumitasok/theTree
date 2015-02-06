@@ -1,7 +1,7 @@
 package theTree
 
 import (
-	// "bytes"
+	"bytes"
 	"errors"
 	// "fmt"
 )
@@ -28,7 +28,16 @@ func SetNodeValue(node *Node, byteArr []byte) error {
 			node.Set(byteArr)
 		}
 	}
+
 	return nil
+}
+
+func byteSplitKeyValue(byteArr, sep []byte, n int) ([][]byte, error) {
+	list := bytes.SplitN(byteArr, sep, n)
+	if len(list) < 2 {
+		return list, errors.New("error")
+	}
+	return list, nil
 }
 
 func bytePluckByteRecursively(byteArr []byte, byteChar byte, byteBackChar byte) []byte {
