@@ -19,14 +19,14 @@ import (
 func TestStringParse(t *testing.T) {
 	assert := assert.New(t)
 
-	byteArray := []byte(`{key: "value \"", "key2" : []}`)
+	byteArr := []byte(`{key: "value \"", "key2" : []}`)
 
 	engine := Normal{}
 	key := "root"
 
 	node := Init(engine, key)
 
-	err := SetNodeValue(node, byteArray)
+	err := SetNodeValue(node, byteArr)
 	expectedByteArr := []byte(`key: "value \"", "key2" : []`)
 	assert.NoError(err)
 
@@ -34,6 +34,30 @@ func TestStringParse(t *testing.T) {
 	assert.Equal(string(expectedByteArr), string(actualByteArr))
 
 	fmt.Println("-----------------------------------")
+}
+
+func TestByteStripOuterCurls(t *testing.T) {
+	assert := assert.New(t)
+	byteArr := []byte(`{key: "value \"", "key2" : []}`)
+
+	expectedByteArr := []byte(`key: "value \"", "key2" : []`)
+
+	actualByteArr, err := byteStripOuterCurls(byteArr)
+	assert.Equal(string(expectedByteArr), string(actualByteArr))
+	assert.NoError(err)
+
+	byteArr = []byte(`key: "value \"", "key2" : []}`)
+	expectedByteArr = []byte(`key: "value \"", "key2" : []}`)
+	actualByteArr, err = byteStripOuterCurls(byteArr)
+	assert.Equal(string(expectedByteArr), string(actualByteArr))
+	assert.Error(err)
+
+	byteArr = []byte(`{key: "value \"", "key2" : []`)
+	expectedByteArr = []byte(`key: "value \"", "key2" : []`)
+	actualByteArr, err = byteStripOuterCurls(byteArr)
+	assert.Equal(string(expectedByteArr), string(actualByteArr))
+	assert.Error(err)
+
 }
 
 func TestByteRemove(t *testing.T) {

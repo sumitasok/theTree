@@ -20,21 +20,16 @@ const (
 
 func SetNodeValue(node *Node, byteArr []byte) error {
 	if node.parent == nil {
-		// stripOuterCurls(string(byteArr))
 		byteArr = bytePluckByteRecursively(byteArr, R_SPACE, R_SPACE)
 
 		if byteIs(byteArr, R_OPEN_CURL) {
-			if byteArr, err := byteRemove(byteArr, R_OPEN_CURL); err == nil {
-				if byteArr, err = byteRemove(Reverse(byteArr), R_CLOSED_CURLED); err == nil {
-					byteArr = Reverse(byteArr)
-					node.Set(byteArr)
-				} else {
-					return err
-				}
+			if byteArr, err := byteStripOuterCurls(byteArr); err != nil {
+				return err
 			} else {
-				return errors.New("error")
+				node.Set(byteArr)
 			}
 		}
+
 	}
 	return nil
 }
@@ -55,8 +50,18 @@ func byteRemove(byteArr []byte, byteChar byte) ([]byte, error) {
 	}
 }
 
-func byteStripOuterCurls(byteArr []byte) []byte {
-	return byteArr
+func byteStripOuterCurls(byteArr []byte) ([]byte, error) {
+	if byteArr, err := byteRemove(byteArr, R_OPEN_CURL); err == nil {
+		if byteArr, err = byteRemove(Reverse(byteArr), R_CLOSED_CURLED); err == nil {
+			byteArr = Reverse(byteArr)
+			return byteArr, nil
+		} else {
+			byteArr = Reverse(byteArr)
+			return byteArr, err
+		}
+	} else {
+		return byteArr, errors.New("error")
+	}
 }
 
 func byteRemoveByteRecursively(byteArr []byte, byteChar byte) []byte {
