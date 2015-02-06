@@ -19,17 +19,14 @@ const (
 )
 
 func SetNodeValue(node *Node, byteArr []byte) error {
-	if node.parent == nil {
-		byteArr = bytePluckByteRecursively(byteArr, R_SPACE, R_SPACE)
+	byteArr = bytePluckByteRecursively(byteArr, R_SPACE, R_SPACE)
 
-		if byteIs(byteArr, R_OPEN_CURL) {
-			if byteArr, err := byteStripOuterCurls(byteArr); err != nil {
-				return err
-			} else {
-				node.Set(byteArr)
-			}
+	if byteIs(byteArr, R_OPEN_CURL) {
+		if byteArr, err := byteStripOuterCurls(byteArr); err != nil {
+			return err
+		} else {
+			node.Set(byteArr)
 		}
-
 	}
 	return nil
 }
