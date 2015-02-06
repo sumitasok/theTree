@@ -19,25 +19,17 @@ const (
 func SetNodeValue(node *Node, byteArr []byte) {
 	if node.parent == nil {
 		// stripOuterCurls(string(byteArr))
-		byteArr = byteRemoveSpace(byteArr)
+		byteArr = byteRemoveByte(byteArr, R_SPACE)
+
+		if byteIs(byteArr, R_OPEN_CURL) {
+
+		}
 	}
 }
 
 // func byteStripOuterCurls(byteArr []byte) []byte {
 
 // }
-
-func byteRemoveSpace(byteArr []byte) []byte {
-	if len(byteArr) == 0 {
-		return byteArr
-	} else {
-		if byteArr[0] != R_SPACE {
-			return byteArr
-		} else {
-			return byteRemoveSpace(byteArr[1:])
-		}
-	}
-}
 
 func byteRemoveByte(byteArr []byte, byteChar byte) []byte {
 	if len(byteArr) == 0 {
@@ -51,6 +43,23 @@ func byteRemoveByte(byteArr []byte, byteChar byte) []byte {
 	}
 }
 
+func byteRemoveFromBack(byteArr []byte, byteChar byte) []byte {
+	return byteArr
+}
+
+func byteIs(byteArr []byte, byteChar byte) bool {
+	byteArr = byteRemoveByte(byteArr, R_SPACE)
+	if len(byteArr) == 0 {
+		return false
+	} else if byteArr[0] == byteChar {
+		return true
+	} else {
+		return false
+	}
+}
+
+// -------------------------------------------------
+
 func byteIsHash(byteArr []byte) bool {
 	byteArr = byteRemoveByte(byteArr, R_SPACE)
 	if len(byteArr) == 0 {
@@ -59,5 +68,17 @@ func byteIsHash(byteArr []byte) bool {
 		return true
 	} else {
 		return false
+	}
+}
+
+func byteRemoveSpace(byteArr []byte) []byte {
+	if len(byteArr) == 0 {
+		return byteArr
+	} else {
+		if byteArr[0] != R_SPACE {
+			return byteArr
+		} else {
+			return byteRemoveSpace(byteArr[1:])
+		}
 	}
 }
