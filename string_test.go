@@ -31,10 +31,10 @@ func TestStringParse(t *testing.T) {
 	fmt.Println("-----------------------------------")
 }
 
-func TestBytePluckByte(t *testing.T) {
+func TestBytePluckByteRecursively(t *testing.T) {
 	assert := assert.New(t)
 
-	byteArr := bytePluckByte([]byte(`  {  `), R_SPACE, R_SPACE)
+	byteArr := bytePluckByteRecursively([]byte(`  {  `), R_SPACE, R_SPACE)
 	assert.Equal(string([]byte(`{`)), string(byteArr))
 }
 
