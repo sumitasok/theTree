@@ -19,7 +19,7 @@ const (
 func SetNodeValue(node *Node, byteArr []byte) {
 	if node.parent == nil {
 		// stripOuterCurls(string(byteArr))
-		byteArr = bytePluckByte(byteArr, R_SPACE)
+		byteArr = bytePluckByte(byteArr, R_SPACE, R_SPACE)
 
 		if byteIs(byteArr, R_OPEN_CURL) {
 
@@ -27,9 +27,9 @@ func SetNodeValue(node *Node, byteArr []byte) {
 	}
 }
 
-func bytePluckByte(byteArr []byte, byteChar byte) []byte {
-	byteArr = byteRemoveByte(byteArr, byteChar)
-	byteArr = byteRemoveByteFromBack(byteArr, byteChar)
+func bytePluckByte(byteArr []byte, byteChar byte, byteBackChar byte) []byte {
+	byteArr = byteRemoveByteRecursively(byteArr, byteChar)
+	byteArr = byteRemoveByteRecursivelyFromBack(byteArr, byteBackChar)
 	return byteArr
 }
 
@@ -37,7 +37,7 @@ func byteStripOuterCurls(byteArr []byte) []byte {
 	return byteArr
 }
 
-func byteRemoveByte(byteArr []byte, byteChar byte) []byte {
+func byteRemoveByteRecursively(byteArr []byte, byteChar byte) []byte {
 	if len(byteArr) == 0 {
 		return byteArr
 	} else {
@@ -49,14 +49,14 @@ func byteRemoveByte(byteArr []byte, byteChar byte) []byte {
 	}
 }
 
-func byteRemoveByteFromBack(byteArr []byte, byteChar byte) []byte {
+func byteRemoveByteRecursivelyFromBack(byteArr []byte, byteChar byte) []byte {
 	revByteArr := Reverse(byteArr)
-	revByteArr = byteRemoveByte(revByteArr, byteChar)
+	revByteArr = byteRemoveByteRecursively(revByteArr, byteChar)
 	return Reverse(revByteArr)
 }
 
 func byteIs(byteArr []byte, byteChar byte) bool {
-	byteArr = byteRemoveByte(byteArr, R_SPACE)
+	byteArr = byteRemoveByteRecursively(byteArr, R_SPACE)
 	if len(byteArr) == 0 {
 		return false
 	} else if byteArr[0] == byteChar {
@@ -69,7 +69,7 @@ func byteIs(byteArr []byte, byteChar byte) bool {
 // -------------------------------------------------
 
 func byteIsHash(byteArr []byte) bool {
-	byteArr = byteRemoveByte(byteArr, R_SPACE)
+	byteArr = byteRemoveByteRecursively(byteArr, R_SPACE)
 	if len(byteArr) == 0 {
 		return false
 	} else if byteArr[0] == R_OPEN_CURL {

@@ -34,40 +34,40 @@ func TestStringParse(t *testing.T) {
 func TestBytePluckByte(t *testing.T) {
 	assert := assert.New(t)
 
-	byteArr := bytePluckByte([]byte(`  {  `), R_SPACE)
+	byteArr := bytePluckByte([]byte(`  {  `), R_SPACE, R_SPACE)
 	assert.Equal(string([]byte(`{`)), string(byteArr))
 }
 
-func TestByteRemoveByte(t *testing.T) {
+func TestByteRemoveByteRecursively(t *testing.T) {
 	assert := assert.New(t)
 
 	byteArr := []byte(``)
 	assert.Empty(byteArr)
 
-	byteArr = byteRemoveByte([]byte(` `), R_SPACE)
+	byteArr = byteRemoveByteRecursively([]byte(` `), R_SPACE)
 	assert.Empty(byteArr)
 
-	byteArr = byteRemoveByte([]byte(`  `), R_SPACE)
+	byteArr = byteRemoveByteRecursively([]byte(`  `), R_SPACE)
 	assert.Empty(byteArr)
 
-	byteArr = byteRemoveByte([]byte(`  {`), R_SPACE)
+	byteArr = byteRemoveByteRecursively([]byte(`  {`), R_SPACE)
 	assert.Equal([]byte(`{`), byteArr)
 
 }
 
-func TestByteRemoveByteFromBack(t *testing.T) {
+func TestByteRemoveByteRecursivelyFromBack(t *testing.T) {
 	assert := assert.New(t)
 
 	byteArr := []byte(``)
 	assert.Empty(byteArr)
 
-	byteArr = byteRemoveByteFromBack([]byte(` `), R_SPACE)
+	byteArr = byteRemoveByteRecursivelyFromBack([]byte(` `), R_SPACE)
 	assert.Empty(byteArr)
 
-	byteArr = byteRemoveByteFromBack([]byte(`  `), R_SPACE)
+	byteArr = byteRemoveByteRecursivelyFromBack([]byte(`  `), R_SPACE)
 	assert.Empty(byteArr)
 
-	byteArr = byteRemoveByteFromBack([]byte(`}  `), R_SPACE)
+	byteArr = byteRemoveByteRecursivelyFromBack([]byte(`}  `), R_SPACE)
 	assert.Equal(string([]byte(`}`)), string(byteArr))
 
 }
