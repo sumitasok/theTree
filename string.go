@@ -1,7 +1,8 @@
 package theTree
 
 import (
-// "bytes"
+	// "bytes"
+	"errors"
 )
 
 const (
@@ -31,6 +32,16 @@ func bytePluckByteRecursively(byteArr []byte, byteChar byte, byteBackChar byte) 
 	byteArr = byteRemoveByteRecursively(byteArr, byteChar)
 	byteArr = byteRemoveByteRecursivelyFromBack(byteArr, byteBackChar)
 	return byteArr
+}
+
+func byteRemove(byteArr []byte, byteChar byte) ([]byte, error) {
+	if len(byteArr) == 0 {
+		return byteArr, errors.New("error")
+	} else if byteArr[0] == byteChar {
+		return byteArr[1:], nil
+	} else {
+		return byteArr, errors.New("error")
+	}
 }
 
 func byteStripOuterCurls(byteArr []byte) []byte {

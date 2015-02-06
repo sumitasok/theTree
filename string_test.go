@@ -31,6 +31,18 @@ func TestStringParse(t *testing.T) {
 	fmt.Println("-----------------------------------")
 }
 
+func TestByteRemove(t *testing.T) {
+	assert := assert.New(t)
+
+	byteArr, _ := byteRemove([]byte(`{  `), R_OPEN_CURL)
+	assert.Equal(string([]byte(`  `)), string(byteArr))
+
+	byteArr, err := byteRemove([]byte(`[  `), R_OPEN_CURL)
+	assert.Equal(string([]byte(`[  `)), string(byteArr))
+	assert.Error(err)
+
+}
+
 func TestBytePluckByteRecursively(t *testing.T) {
 	assert := assert.New(t)
 
