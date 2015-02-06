@@ -10,8 +10,8 @@ package theTree
 // then parse and create CHild Nodes and assign their values
 
 import (
-	// "bytes"
-	// "fmt"
+	"bytes"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -39,11 +39,11 @@ import (
 func TestParseNode(t *testing.T) {
 	assert := assert.New(t)
 
-	byteArr := []byte(`key: "value \"", "key2" : []`)
+	byteArr := []byte(`key: "value \"", "key2" : value_2`)
 
-	// for i, r := range bytes.Runes(byteArr) {
-	// 	fmt.Println(i, " - ", r, " - ", string(r))
-	// }
+	for i, r := range bytes.Runes(byteArr) {
+		fmt.Println(i, " - ", r, " - ", string(r))
+	}
 
 	engine := Normal{}
 	key := "root"
@@ -59,6 +59,25 @@ func TestParseNode(t *testing.T) {
 	assert.NoError(err)
 
 	newNodeValue, err1 := newNode.Value.([]uint8)
+	assert.Equal(string([]byte(`"value \""`)), string(newNodeValue))
+	assert.True(err1)
+
+	fmt.Println("----------------------------")
+
+	node = Init(engine, key)
+	node.Set(byteArr)
+
+	parseNode(node, byteArr)
+
+	for i, n := range node.Children {
+		fmt.Println(i, n.Key)
+	}
+
+	newNode, err = node.Child(string([]byte(`"key2"`)))
+	assert.Equal("key2", newNode.Key)
+	assert.NoError(err)
+
+	newNodeValue, err1 = newNode.Value.([]uint8)
 	assert.Equal(string([]byte(`"value \""`)), string(newNodeValue))
 	assert.True(err1)
 

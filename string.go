@@ -7,16 +7,17 @@ import (
 )
 
 const (
-	R_OPEN_CURL     = 123
-	R_CLOSED_CURLED = 125
-	R_COLON         = 58
-	R_SPACE         = 32
-	R_DOUBLE_QOUTE  = 34
-	R_SLASH_N       = 10
-	R_OPEN_SQUARE   = 91
-	R_CLOSED_SQUARE = 93
-	R_TAB           = 9
-	R_COMMA         = 44
+	R_OPEN_CURL      = 123
+	R_CLOSED_CURLED  = 125
+	R_COLON          = 58
+	R_SPACE          = 32
+	R_DOUBLE_QOUTE   = 34
+	R_SLASH_N        = 10
+	R_OPEN_SQUARE    = 91
+	R_CLOSED_SQUARE  = 93
+	R_BACKWARD_SLASH = 92
+	R_TAB            = 9
+	R_COMMA          = 44
 )
 
 func SetNodeValue(node *Node, byteArr []byte) error {
@@ -53,26 +54,43 @@ func parseNode(node *Node, value []byte) {
 	fmt.Println("parseNode 1", node.Key, string(str))
 
 	byteArrOfArr, err := byteSplitKeyValue(byteArr, []byte(`:`), 2)
-	if err == nil {
-		fmt.Println("err nil in byteSplitKeyValue", string(byteArrOfArr[0]))
-		newNode, errAppend := node.Append(string(byteArrOfArr[0]))
-		if errAppend == nil {
-			fmt.Println("err nil in Append", string(byteArrOfArr[1]))
-			// split on next, and then set value,
-			// and send next parse with remaining value
-			baa, errGetValue := GetValue(byteArrOfArr[1])
-			if errGetValue == nil {
-				fmt.Println("err nil in GetValue", string(baa[0]))
-				SetNodeValue(newNode, baa[0])
-				fmt.Println("parseNode 3", newNode.Key, string(baa[0]))
+	keyPart := byteArrOfArr[0]
+	fmt.Println("keyPart", string(keyPart))
+	if len(byteArrOfArr) > 1 {
+		valuePart := byteArrOfArr[1]
+		if err == nil {
+			fmt.Println("err nil in byteSplitKeyValue", string(keyPart))
+			keyPart = bytePluckByteRecursively(keyPart, R_SPACE, R_SPACE)
+			keyPart, _ = byteRemove(keyPart, R_BACKWARD_SLASH)
+			keyPart = byteRemoveByteRecursively(keyPart, R_DOUBLE_QOUTE)
+			keyPart = byteRemoveByteRecursivelyFromBack(keyPart, R_DOUBLE_QOUTE)
+			newNode, errAppend := node.Append(string(keyPart))
+			if errAppend == nil {
+				fmt.Println("err nil in Append", string(valuePart))
+				// split on next, and then set value,
+				// and send next parse with remaining value
+				baa, errGetValue := GetValue(valuePart)
+				fmt.Println(errGetValue)
+				if errGetValue == nil {
+					thisChildValue := baa[0]
+					nextChildKeyValue := baa[1]
+					fmt.Println("err nil in GetValue", string(thisChildValue))
+					fmt.Println("parseNode 3", newNode.Key, string(thisChildValue))
+					SetNodeValue(newNode, thisChildValue)
 
-				SetNodeValue(node, baa[1])
-				fmt.Println("parseNode 4", node.Key, string(baa[1]))
+					fmt.Println("parseNode 4", node.Key, string(baa[1]))
+					SetNodeValue(node, nextChildKeyValue)
+				} else {
+					newNode, err := node.Append(string(keyPart))
+					if err != nil {
+						fmt.Println(err, "cannot append")
+						newNode.Set(valuePart)
 
-				// parseNode(node, )
-			} else {
-				fmt.Println("parseNode 2", newNode.Key, string(byteArrOfArr[1]))
-				SetNodeValue(newNode, byteArrOfArr[1])
+					} else {
+						newNode.Set(valuePart)
+					}
+
+				}
 			}
 		}
 	}
