@@ -5,7 +5,7 @@ import (
 	"bytes"
 )
 
-func PrepareKey(byteArr []byte) string {
+func PrepareKeyByte(byteArr []byte) []byte {
 
 	ignoreList := []byte(`!"#$%&'()*+,-./:;<=>?@[\]^_{|}~ `)
 
@@ -28,7 +28,11 @@ func PrepareKey(byteArr []byte) string {
 		}
 	}
 
-	return string(byteArr[startIndex:endIndex])
+	return byteArr[startIndex:endIndex]
+}
+
+func PrepareKey(byteArr []byte) string {
+	return string(PrepareKeyByte(byteArr))
 }
 
 func reverse(b []byte) []byte {
