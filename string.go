@@ -21,32 +21,6 @@ const (
 	R_COMMA          = 44
 )
 
-func SetNodeValue(node *Node, byteArr []byte) error {
-	byteArr = bytePluckByteRecursively(byteArr, R_SPACE, R_SPACE)
-
-	fmt.Println(string(byteArr))
-	node.Set(byteArr)
-
-	if byteIs(byteArr, R_OPEN_CURL) {
-		if byteArr, err := byteStripOuterCurls(byteArr); err != nil {
-			return err
-		} else {
-			// node.Set(byteArr)
-			parseNode(node, byteArr)
-		}
-	}
-
-	if byteIs(byteArr, R_OPEN_SQUARE) {
-		return errors.New(("arrays undefined"))
-	}
-
-	value := byteArr
-
-	parseNode(node, value)
-
-	return nil
-}
-
 func parseNode(node *Node, value []byte) {
 	byteArr := value
 	// go through each , seperated key-value pair
@@ -84,7 +58,6 @@ func parseNode(node *Node, value []byte) {
 					if err != nil {
 						fmt.Println(err, "cannot append")
 						newNode.Set(valuePart)
-
 					} else {
 						newNode.Set(valuePart)
 					}

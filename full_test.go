@@ -9,32 +9,14 @@ package theTree
 // set value as the string
 // then parse and create CHild Nodes and assign their values
 
-import (
-	"bytes"
-	"fmt"
-	"github.com/stretchr/testify/assert"
-	"testing"
-)
+// import (
+// 	"bytes"
+// 	"fmt"
+// 	"github.com/stretchr/testify/assert"
+// 	"testing"
+// )
 
-func TestStringParse(t *testing.T) {
-	assert := assert.New(t)
-
-	byteArr := []byte(`{key: "value \"", "key2" : []}`)
-
-	engine := Normal{}
-	key := "root"
-
-	node := Init(engine, key)
-
-	err := SetNodeValue(node, byteArr)
-	expectedByteArr := []byte(`"key2" : []`)
-	assert.NoError(err)
-
-	actualByteArr, _ := node.Value.([]uint8)
-	assert.Equal(string(actualByteArr), string(expectedByteArr))
-
-	fmt.Println("-----------------------------------")
-}
+/*
 
 func TestParseNode(t *testing.T) {
 	assert := assert.New(t)
@@ -83,3 +65,5 @@ func TestParseNode(t *testing.T) {
 	// 	assert.True(err1)
 	// }
 }
+
+*/
