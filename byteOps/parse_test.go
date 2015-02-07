@@ -29,7 +29,12 @@ func TestPrepareValueByte(t *testing.T) {
 	assert.Equal(eVal, PrepareValueByte(aVal))
 
 	aVal = []byte(`value\"" `)
-	eVal = []byte(`value\"`)
+	eVal = []byte(`value\`)
+
+	assert.Equal(eVal, PrepareValueByte(aVal))
+
+	aVal = []byte(`value\" `)
+	eVal = []byte(`value\`)
 
 	assert.Equal(eVal, PrepareValueByte(aVal))
 }
