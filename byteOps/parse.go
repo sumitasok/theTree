@@ -6,8 +6,13 @@ import (
 )
 
 func PrepareKeyByte(byteArr []byte) []byte {
-
 	ignoreList := []byte(`!"#$%&'()*+,-./:;<=>?@[\]^_{|}~ `)
+	return Prepare(byteArr, ignoreList)
+}
+
+func PrepareValueByte(byteArr []byte) []byte {
+	byteArr = bytes.TrimSpace(byteArr)
+	ignoreList := []byte(`"`)
 
 	byteLen := len(byteArr)
 	revByteArr := reverse(byteArr)
@@ -31,8 +36,32 @@ func PrepareKeyByte(byteArr []byte) []byte {
 	return byteArr[startIndex:endIndex]
 }
 
+func Prepare(byteArr []byte, ignoreList []byte) []byte {
+	byteLen := len(byteArr)
+	revByteArr := reverse(byteArr)
+
+	startIndex, endIndex := 0, 0
+
+	for i, b := range byteArr {
+		if (bytes.Contains(ignoreList, []byte{b}) || b == 96) == false {
+			startIndex = i
+			break
+		}
+	}
+
+	for i, b := range revByteArr {
+		if (bytes.Contains(ignoreList, []byte{b}) || b == 96) == false {
+			endIndex = byteLen - i
+			break
+		}
+	}
+
+	return byteArr[startIndex:endIndex]
+}
+
 func PrepareKey(byteArr []byte) string {
-	return string(PrepareKeyByte(byteArr))
+	kByte := PrepareKeyByte(byteArr)
+	return string(kByte)
 }
 
 func reverse(b []byte) []byte {
