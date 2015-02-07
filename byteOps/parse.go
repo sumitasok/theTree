@@ -27,7 +27,10 @@ func PrepareValueByte(byteArr []byte) []byte {
 	}
 
 	for i, b := range revByteArr {
-		if (bytes.Contains(ignoreList, []byte{b}) || b == 96) == false {
+		if (bytes.Contains(ignoreList, []byte{b})) == false {
+			endIndex = byteLen - i
+			break
+		} else if revByteArr[i+1] == 92 {
 			endIndex = byteLen - i
 			break
 		}
