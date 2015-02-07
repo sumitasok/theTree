@@ -1,10 +1,13 @@
 package byteOps
 
 import (
-// "fmt"
+	// "fmt"
+	"bytes"
 )
 
 func PrepareKey(byteArr []byte) string {
+
+	ignoreList := []byte(`!"#$%&'()*+,-./:;<=>?@[\]^_{|}~ `)
 
 	byteLen := len(byteArr)
 	revByteArr := reverse(byteArr)
@@ -12,14 +15,14 @@ func PrepareKey(byteArr []byte) string {
 	startIndex, endIndex := 0, 0
 
 	for i, b := range byteArr {
-		if (b > 96 && b < 123) || (b > 64 && b < 91) {
+		if (bytes.Contains(ignoreList, []byte{b}) || b == 96) == false {
 			startIndex = i
 			break
 		}
 	}
 
 	for i, b := range revByteArr {
-		if (b > 96 && b < 123) || (b > 64 && b < 91) {
+		if (bytes.Contains(ignoreList, []byte{b}) || b == 96) == false {
 			endIndex = byteLen - i
 			break
 		}
