@@ -60,11 +60,8 @@ func parseNode(node *Node, value []byte) {
 		valuePart := byteArrOfArr[1]
 		if err == nil {
 			fmt.Println("err nil in byteSplitKeyValue", string(keyPart))
-			keyPart = bytePluckByteRecursively(keyPart, R_SPACE, R_SPACE)
-			keyPart, _ = byteRemove(keyPart, R_BACKWARD_SLASH)
-			keyPart = byteRemoveByteRecursively(keyPart, R_DOUBLE_QOUTE)
-			keyPart = byteRemoveByteRecursivelyFromBack(keyPart, R_DOUBLE_QOUTE)
-			newNode, errAppend := node.Append(string(keyPart))
+			keyStr := prepareKey(keyPart)
+			newNode, errAppend := node.Append(keyStr)
 			if errAppend == nil {
 				fmt.Println("err nil in Append", string(valuePart))
 				// split on next, and then set value,
@@ -89,11 +86,18 @@ func parseNode(node *Node, value []byte) {
 					} else {
 						newNode.Set(valuePart)
 					}
-
 				}
 			}
 		}
 	}
+}
+
+func prepareKey(byteArr []byte) string {
+	byteArr = bytePluckByteRecursively(byteArr, R_SPACE, R_SPACE)
+	byteArr, _ = byteRemove(byteArr, R_BACKWARD_SLASH)
+	byteArr = byteRemoveByteRecursively(byteArr, R_DOUBLE_QOUTE)
+	byteArr = byteRemoveByteRecursivelyFromBack(byteArr, R_DOUBLE_QOUTE)
+	return string(byteArr)
 }
 
 func GetValue(byteArr []byte) ([][]byte, error) {
