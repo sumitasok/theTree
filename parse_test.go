@@ -36,27 +36,13 @@ func TestParseKeyValue(t *testing.T) {
 
 	assert.Equal(2, len(kvList))
 
-	assert.Equal(printStrOfBytes([]byte(`key`)), printStrOfBytes(kvList[0].Key))
-	assert.Equal(printStrOfBytes([]byte(`"value \"`)), printStrOfBytes(kvList[0].Value))
+	assert.Equal([]byte(`key`), kvList[0].Key)
+	assert.Equal([]byte(`value \`), kvList[0].Value)
 
-	assert.Equal(printStrOfBytes([]byte(`key2`)), printStrOfBytes(kvList[1].Key))
-	assert.Equal(printStrOfBytes([]byte(`"value_2"`)), printStrOfBytes(kvList[1].Value))
+	assert.Equal([]byte(`key2`), kvList[1].Key)
+	assert.Equal([]byte(`value_2`), kvList[1].Value)
 
 	assert.True(true)
-}
-
-func TestPrepareValue(t *testing.T) {
-	assert := assert.New(t)
-
-	aVal := []byte(`" \"value"`)
-	eVal := []byte(` \"value`)
-
-	assert.Equal(eVal, PrepareValue(aVal))
-
-	aVal = []byte(` "\"value\" " `)
-	eVal = []byte(`\"value\" `)
-
-	assert.Equal(eVal, PrepareValue(aVal))
 }
 
 func printStrOfBytes(byteArr interface{}) string {

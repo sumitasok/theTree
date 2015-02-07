@@ -1,7 +1,6 @@
 package theTree
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"github.com/sumitasok/theTree/byteOps"
@@ -60,6 +59,7 @@ func parseKeyValue(byteArr []byte) []KV {
 
 		if b == 44 {
 			value = byteArr[cntIdx:i]
+			value = byteOps.PrepareValueByte(value)
 			cntIdx = i + 1
 			kv := KV{key, value}
 			kvList = append(kvList, kv)
@@ -67,6 +67,7 @@ func parseKeyValue(byteArr []byte) []KV {
 
 		if i == len(byteArr)-1 {
 			value = byteArr[cntIdx:]
+			value = byteOps.PrepareValueByte(value)
 			cntIdx = i + 1
 			kv := KV{key, value}
 			kvList = append(kvList, kv)
@@ -75,42 +76,6 @@ func parseKeyValue(byteArr []byte) []KV {
 
 	return kvList
 
-}
-
-func PrepareValue(byteArr []byte) []byte {
-	byteArr = bytes.TrimSpace(byteArr)
-	ignoreList := []byte(`"`)
-
-	byteLen := len(byteArr)
-	revByteArr := reverse(byteArr)
-
-	startIndex, endIndex := 0, 0
-
-	for i, b := range byteArr {
-		if (bytes.Contains(ignoreList, []byte{b}) || b == 96) == false {
-			startIndex = i
-			break
-		}
-	}
-
-	for i, b := range revByteArr {
-		if (bytes.Contains(ignoreList, []byte{b}) || b == 96) == false {
-			endIndex = byteLen - i
-			break
-		}
-	}
-
-	return byteArr[startIndex:endIndex]
-}
-
-func reverse(b []byte) []byte {
-	r := make([]byte, len(b))
-
-	for i, j := 0, len(b)-1; i < j; i, j = i+1, j-1 {
-		r[i], r[j] = b[j], b[i]
-	}
-
-	return r
 }
 
 func parseNodes(node *Node, value []byte) {
