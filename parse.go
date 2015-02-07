@@ -1,6 +1,7 @@
 package theTree
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"github.com/sumitasok/theTree/byteOps"
@@ -9,7 +10,7 @@ import (
 func SetNodeValue(node *Node, byteArr []byte) error {
 	byteArr = bytePluckByteRecursively(byteArr, R_SPACE, R_SPACE)
 
-	fmt.Println(string(byteArr))
+	// fmt.Println(string(byteArr))
 	node.Set(byteArr)
 
 	if byteIs(byteArr, R_OPEN_CURL) {
@@ -18,15 +19,27 @@ func SetNodeValue(node *Node, byteArr []byte) error {
 		} else {
 			SetNodeValue(node, byteArr)
 		}
-	}
-
-	if byteIs(byteArr, R_OPEN_SQUARE) {
+	} else if byteIs(byteArr, R_OPEN_SQUARE) {
 		return errors.New(("arrays undefined"))
+	} else if bytes.Contains(byteArr, []byte(`{`)) == false {
+		node.Set(byteArr)
+		return nil
 	}
 
-	value := byteArr
+	// value := byteArr
 
-	parseNodes(node, value)
+	// parseNodes(node, value)
+
+	kvList := parseKeyValue(byteArr)
+
+	for i, kv := range kvList {
+		nC, e := node.Append(string(kv.Key))
+		if e == nil {
+			SetNodeValue(nC, kv.Value)
+		} else {
+			return errors.New(fmt.Sprintf("key couldnt be identified %i %s", i, e))
+		}
+	}
 
 	return nil
 }
@@ -102,21 +115,22 @@ func parseNodes(node *Node, value []byte) {
 					nextChildKeyValue := baa[1]
 					SetNodeValue(thisNodeC, thisChildValue)
 					SetNodeValue(node, nextChildKeyValue)
-					fmt.Println("nextChildKeyValue", string(nextChildKeyValue))
+					// fmt.Println("nextChildKeyValue", string(nextChildKeyValue))
 				} else {
 					thisNodeC, err := node.Append(keyStr)
 					if err != nil {
-						fmt.Println("In err not nil", string(valuePart))
+						// fmt.Println("In err not nil", string(valuePart))
 						thisNodeC.Set(valuePart)
 					} else {
-						fmt.Println("In err nil", string(valuePart))
+						// fmt.Println("In err nil", string(valuePart))
 						thisNodeC.Set(valuePart)
 					}
 				}
 			} else {
-				c, e := node.UpdateChild(keyStr, valuePart)
-				fmt.Println("If Update", c, "If Error", e)
-				fmt.Println("If Update Value", c.Value)
+				// c, e :=
+				node.UpdateChild(keyStr, valuePart)
+				// fmt.Println("If Update", c, "If Error", e)
+				// fmt.Println("If Update Value", c.Value)
 			}
 		}
 	}
