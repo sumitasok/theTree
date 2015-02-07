@@ -4,7 +4,7 @@ import (
 // "fmt"
 )
 
-func prepareKey(byteArr []byte) string {
+func PrepareKey(byteArr []byte) string {
 
 	byteLen := len(byteArr)
 	revByteArr := reverse(byteArr)

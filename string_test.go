@@ -7,13 +7,6 @@ import (
 	"testing"
 )
 
-func TestPrepareKey(t *testing.T) {
-	assert := assert.New(t)
-
-	key := []byte(`"key2`)
-	assert.Equal("key2", prepareKey(key))
-}
-
 func TestByteSplitKeyValue(t *testing.T) {
 	assert := assert.New(t)
 	byteArr := []byte(`key: "value \"", "key2" : []`)

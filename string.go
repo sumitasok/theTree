@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/sumitasok/theTree/byteOps"
 )
 
 const (
@@ -30,7 +31,8 @@ func SetNodeValue(node *Node, byteArr []byte) error {
 		if byteArr, err := byteStripOuterCurls(byteArr); err != nil {
 			return err
 		} else {
-			node.Set(byteArr)
+			// node.Set(byteArr)
+			parseNode(node, byteArr)
 		}
 	}
 
@@ -60,7 +62,7 @@ func parseNode(node *Node, value []byte) {
 		valuePart := byteArrOfArr[1]
 		if err == nil {
 			fmt.Println("err nil in byteSplitKeyValue", string(keyPart))
-			keyStr := prepareKey(keyPart)
+			keyStr := byteOps.PrepareKey(keyPart)
 			newNode, errAppend := node.Append(keyStr)
 			if errAppend == nil {
 				fmt.Println("err nil in Append", string(valuePart))
@@ -90,14 +92,6 @@ func parseNode(node *Node, value []byte) {
 			}
 		}
 	}
-}
-
-func prepareKey(byteArr []byte) string {
-	byteArr = bytePluckByteRecursively(byteArr, R_SPACE, R_SPACE)
-	byteArr, _ = byteRemove(byteArr, R_BACKWARD_SLASH)
-	byteArr = byteRemoveByteRecursively(byteArr, R_DOUBLE_QOUTE)
-	byteArr = byteRemoveByteRecursivelyFromBack(byteArr, R_DOUBLE_QOUTE)
-	return string(byteArr)
 }
 
 func GetValue(byteArr []byte) ([][]byte, error) {

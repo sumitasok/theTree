@@ -9,8 +9,8 @@ import (
 func TestPrepareKey(t *testing.T) {
 	assert := assert.New(t)
 
-	assert.Empty(prepareKey([]byte(``)))
+	assert.Empty(PrepareKey([]byte(``)))
 
-	assert.Equal("abc", prepareKey([]byte(`  abc} `)))
-	assert.Equal("abc", prepareKey([]byte(`  abc`)))
+	assert.Equal("abc", PrepareKey([]byte(`  abc} `)))
+	assert.Equal("abc", PrepareKey([]byte(`  abc`)))
 }
